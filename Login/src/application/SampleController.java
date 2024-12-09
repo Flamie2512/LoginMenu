@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -22,8 +22,8 @@ public class SampleController {
  @FXML
  private TextField userText;
  @FXML
- private TextField passText;
- 
+ private PasswordField passText;
+
  private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
 	    Alert alert = new Alert(alertType);
 	    alert.setTitle(title);
@@ -31,7 +31,6 @@ public class SampleController {
 	    alert.setContentText(content);
 	    alert.showAndWait();
 	}
-
  
  @FXML
  public void Login(ActionEvent event) throws IOException {
@@ -41,7 +40,7 @@ public class SampleController {
 	 if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
 	        showAlert(Alert.AlertType.WARNING, "Login Failed", "Missing Information", "Please enter username and password!");
 	 } else if (!AccountManager.getInstance().accountExists(username)) {
-         showAlert(Alert.AlertType.ERROR, "Login Failed", "Account Not Found", "This account does not exist. Please register first!");
+         showAlert(Alert.AlertType.ERROR, "Login Failed", "Account Not Found", "This account does not exist.");
      } else if (!AccountManager.getInstance().validateCredentials(username, password)) {
 	        showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid Credentials", "Incorrect username or password!");
 	    } else {
@@ -67,16 +66,4 @@ public class SampleController {
      stage.setScene(scene);
      stage.show();
  	}
- 
- public void initialize() {
-	    // Khi nhấn Enter ở ô mật khẩu, thực hiện đăng nhập
-	    passText.setOnAction(event -> {
-	        try {
-	            Login(new ActionEvent(passText, passText));
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-	    });
- }
-
 }

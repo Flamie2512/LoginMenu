@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
+   <children>
+      <Button layoutX="253.0" layoutY="236.0" mnemonicParsing="false" onAction="#Confirm" prefHeight="26.0" prefWidth="109.0" text="Confirm" />
+      <TextField fx:id="NewuserText" layoutX="233.0" layoutY="87.0" promptText="New Username" />
+      <TextField fx:id="NewpassText" layoutX="233.0" layoutY="135.0" promptText="New Password" />
+      <TextField fx:id="ConfirmpassText" layoutX="233.0" layoutY="186.0" promptText="Confirm Password" />
+      <Label layoutX="151.0" layoutY="92.0" prefHeight="18.0" prefWidth="63.0" text=" Username" />
+      <Label layoutX="151.0" layoutY="140.0" prefHeight="18.0" prefWidth="63.0" text=" Password" />
+      <Label layoutX="111.0" layoutY="191.0" prefHeight="18.0" prefWidth="102.0" text="Confirm password" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,112 @@
+package application;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+public class SampleController {
+
+ private Stage stage;
+ private Scene scene;
+ private Parent root;
+ 
+ @FXML
+ private TextField userText;
+ @FXML
+ private TextField passText;
+ @FXML
+ private TextField NewpassText;
+ @FXML
+ private TextField NewuserText;
+ @FXML
+ private TextField ConfirmpassText;
+ 
+ 
+ private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
+	    Alert alert = new Alert(alertType);
+	    alert.setTitle(title);
+	    alert.setHeaderText(header);
+	    alert.setContentText(content);
+	    alert.showAndWait();
+	}
+
+ 
+ @FXML
+ public void Login(ActionEvent event) throws IOException {
+	 String username = userText.getText();
+	 String password = passText.getText();
+	 
+	 if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+	        showAlert(Alert.AlertType.WARNING, "Login Failed", "Missing Information", "Please enter username and password!");
+	 } else if (!AccountManager.getInstance().accountExists(username)) {
+         showAlert(Alert.AlertType.ERROR, "Login Failed", "Account Not Found", "This account does not exist. Please register first!");
+     } else if (!AccountManager.getInstance().validateCredentials(username, password)) {
+	        showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid Credentials", "Incorrect username or password!");
+	    } else {
+	    	String targetFXML = username.toLowerCase().contains("admin") ? "Admin.fxml" : "Student.fxml";
+	        Parent root = FXMLLoader.load(getClass().getResource(targetFXML));
+	        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+	        Scene scene = new Scene(root);
+	        stage.setScene(scene);
+	        stage.show();
+     	}
+ 	}
+
+ @FXML
+ public void SwitchToRegister(ActionEvent event) throws IOException {
+	 root = FXMLLoader.load(getClass().getResource("Register.fxml"));
+     stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+     scene = new Scene(root);
+     stage.setScene(scene);
+     stage.show();
+ }
+ 
+ public void Confirm(ActionEvent event) throws IOException {
+ 
+     String newUsername = NewuserText.getText();
+     String newPassword = NewpassText.getText();
+     String confirmPassword = ConfirmpassText.getText();
+
+     if (newUsername == null || newUsername.trim().isEmpty() || 
+    	        newPassword == null || newPassword.trim().isEmpty() ||
+    	        confirmPassword == null || confirmPassword.trim().isEmpty()) {
+    	        showAlert(AlertType.WARNING, "Registration Failed", "Missing Information", "Please fill in all fields!");
+    	    } else if (!newPassword.equals(confirmPassword)) {
+    	        showAlert(AlertType.ERROR, "Registration Failed", "Password Mismatch", "Passwords do not match! Please try again.");
+    	    } else if (AccountManager.getInstance().accountExists(newUsername)) {
+    	        showAlert(AlertType.ERROR, "Registration Failed", "Account Exists", "This username is already taken. Please try another!");
+    	    } else {
+    	        // Thêm tài khoản mới
+    	        AccountManager.getInstance().addAccount(newUsername, newPassword);
+    	        showAlert(AlertType.INFORMATION, "Registration Successful", "Account Created", "Your account has been created successfully. You can now log in!");
+         
+         Parent root = FXMLLoader.load(getClass().getResource("LoginMenu.fxml"));
+         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+         Scene scene = new Scene(root);
+         stage.setScene(scene);
+         stage.show();
+     }
+ }
+ 
+ @FXML
+ private void Logout(ActionEvent event) throws IOException {
+     root = FXMLLoader.load(getClass().getResource("LoginMenu.fxml"));
+     stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+     scene = new Scene(root);
+     stage.setScene(scene);
+     stage.show();
+ 	}
+ 
+ 
+}

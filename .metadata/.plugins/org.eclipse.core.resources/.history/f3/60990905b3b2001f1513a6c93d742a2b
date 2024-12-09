@@ -1,0 +1,32 @@
+package application;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class AccountManager {
+    private static AccountManager instance;
+    private Map<String, String> accounts;
+
+    private AccountManager() {
+        accounts = new HashMap<>();
+    }
+
+    public static AccountManager getInstance() {
+        if (instance == null) {
+            instance = new AccountManager();
+        }
+        return instance;
+    }
+
+    public boolean accountExists(String username) {
+        return accounts.containsKey(username);
+    }
+
+    public boolean validateCredentials(String username, String password) {
+        return accounts.containsKey(username) && accounts.get(username).equals(password);
+    }
+
+    public void addAccount(String username, String password) {
+        accounts.put(username, password);
+    }
+}

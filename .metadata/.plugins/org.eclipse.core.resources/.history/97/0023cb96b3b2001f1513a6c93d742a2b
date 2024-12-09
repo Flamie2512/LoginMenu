@@ -1,0 +1,69 @@
+package application;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+
+public class AccountManager {
+    private static AccountManager instance;
+    private Map<String, String> accounts = new HashMap<>();
+    private final String FILE_PATH = "accounts.txt";
+
+    private AccountManager() {
+        loadAccounts();
+    }
+
+    public static AccountManager getInstance() {
+        if (instance == null) {
+            instance = new AccountManager();
+        }
+        return instance;
+    }
+
+    // Lưu tài khoản mới
+    public void addAccount(String username, String password) {
+        accounts.put(username, password);
+        saveAccounts();
+    }
+
+    // Kiểm tra tài khoản tồn tại
+    public boolean accountExists(String username) {
+        return accounts.containsKey(username);
+    }
+
+    // Xác thực thông tin đăng nhập
+    public boolean validateCredentials(String username, String password) {
+        return accounts.containsKey(username) && accounts.get(username).equals(password);
+    }
+
+    // Ghi tài khoản vào file
+    private void saveAccounts() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
+            for (Map.Entry<String, String> entry : accounts.entrySet()) {
+                writer.write(entry.getKey() + "," + entry.getValue());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Đọc tài khoản từ file
+    private void loadAccounts() {
+        File file = new File(FILE_PATH);
+        if (!file.exists()) {
+            return; // Không làm gì nếu file chưa tồn tại
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    accounts.put(parts[0], parts[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
